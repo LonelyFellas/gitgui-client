@@ -1,36 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:gitguilar/pages/launch.dart';
+import 'package:gitguilar/pages/launch/page.dart';
+import 'package:gitguilar/services/initialization.dart';
+import 'package:gitguilar/utils/error_handler.dart';
 
 void main() {
-  runApp(const MyApp());
+  // 初始化全局异常处理
+  ErrorHandler.initialize();
+
+  // 在 Zone 中运行应用，捕获所有未捕获的异常
+  ErrorHandler.runZonedGuardedApp(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await InitializationService.initialize();
+
+    runApp(const MainPage());
+  });
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainPage extends StatelessWidget {
+  const MainPage({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Git Guilar',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      // ErrorWidget.builder 已在 ErrorHandler.initialize() 中设置
+      // 它会自动处理 Widget 构建错误
       home: const LaunchPage(),
     );
   }

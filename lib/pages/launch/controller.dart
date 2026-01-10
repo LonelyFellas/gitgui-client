@@ -1,0 +1,3 @@
+class LaunchController {
+  LaunchController();
+}
