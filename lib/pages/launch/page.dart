@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gitguilar/pages/launch/controller.dart';
+import 'package:gitguilar/pages/launch/widgets/add_repository_dialog.dart';
 import 'package:gitguilar/utils/git.dart';
+import 'package:file_picker/file_picker.dart';
 
 class LaunchPage extends StatefulWidget {
   const LaunchPage({super.key});
@@ -15,6 +17,32 @@ class _LaunchPageState extends State<LaunchPage> {
   late LaunchController _controller;
   final bool _isInstalledGit = Git.instance.isInstalled;
   _RepositoryType _repositoryType = _RepositoryType.local;
+
+  void openAddRepositoryDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('创建本地仓库'),
+        content: AddRepositoryDialog(
+          onFormChanged: (formState) {
+            if (formState != null) {
+              print(formState.toString());
+            }
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('取消'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('确定'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -32,7 +60,7 @@ class _LaunchPageState extends State<LaunchPage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () => openAddRepositoryDialog(context),
       ),
       body: Column(
         children: [
